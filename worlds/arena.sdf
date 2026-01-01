@@ -1,0 +1,178 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="arena">
+
+    <!-- ===== Scene : 明るく ===== -->
+    <scene>
+      <ambient>0.75 0.75 0.75 1</ambient>
+      <background>0.92 0.96 1.0 1</background>
+    </scene>
+
+    <!-- ===== GUI : 上から俯瞰（全体が入る高さ） ===== -->
+    <gui fullscreen="false">
+      <camera name="user_camera">
+        <!-- x y z roll pitch yaw -->
+        <pose>-2 -2 10 0 1.57 0</pose>
+      </camera>
+    </gui>
+
+    <!-- ===== Light : しっかり明るく ===== -->
+    <light name="sun" type="directional">
+      <pose>0 0 20 0 0 0</pose>
+      <direction>-0.5 -0.5 -1</direction>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.3 0.3 0.3 1</specular>
+      <attenuation>
+        <range>100</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+    </light>
+
+    <!-- 追加の補助光（暗い側のつぶれ防止） -->
+    <light name="fill" type="directional">
+      <pose>0 0 15 0 0 0</pose>
+      <direction>0.4 0.2 -1</direction>
+      <diffuse>0.6 0.6 0.65 1</diffuse>
+      <specular>0.15 0.15 0.15 1</specular>
+    </light>
+
+    <!-- ===== Ground ===== -->
+    <model name="ground">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>20 20</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>20 20</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.75 0.75 0.75 1</ambient>
+            <diffuse>0.85 0.85 0.85 1</diffuse>
+            <specular>0.08 0.08 0.08 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== Walls : arena [-4,4] ===== -->
+    <!-- North (赤) -->
+    <model name="wall_n">
+      <static>true</static>
+      <pose>0 4 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>8 0.2 1</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>8 0.2 1</size></box></geometry>
+          <material>
+            <ambient>0.55 0.10 0.10 1</ambient>
+            <diffuse>0.95 0.20 0.20 1</diffuse>
+            <specular>0.12 0.12 0.12 1</specular>
+            <emissive>0.05 0.01 0.01 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- South (青) -->
+    <model name="wall_s">
+      <static>true</static>
+      <pose>0 -4 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>8 0.2 1</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>8 0.2 1</size></box></geometry>
+          <material>
+            <ambient>0.10 0.15 0.55 1</ambient>
+            <diffuse>0.20 0.35 0.95 1</diffuse>
+            <specular>0.12 0.12 0.12 1</specular>
+            <emissive>0.01 0.02 0.06 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- East (緑) -->
+    <model name="wall_e">
+      <static>true</static>
+      <pose>4 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.2 8 1</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.2 8 1</size></box></geometry>
+          <material>
+            <ambient>0.10 0.45 0.10 1</ambient>
+            <diffuse>0.20 0.90 0.25 1</diffuse>
+            <specular>0.12 0.12 0.12 1</specular>
+            <emissive>0.01 0.05 0.01 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- West (黄) -->
+    <model name="wall_w">
+      <static>true</static>
+      <pose>-4 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>0.2 8 1</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>0.2 8 1</size></box></geometry>
+          <material>
+            <ambient>0.55 0.50 0.10 1</ambient>
+            <diffuse>0.95 0.90 0.20 1</diffuse>
+            <specular>0.12 0.12 0.12 1</specular>
+            <emissive>0.06 0.05 0.01 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== Center obstacle (濃いグレーだけど黒つぶれしない) ===== -->
+    <model name="center_box">
+      <static>true</static>
+      <pose>0 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="col"><geometry><box><size>1.2 1.2 1</size></box></geometry></collision>
+        <visual name="vis">
+          <geometry><box><size>1.2 1.2 1</size></box></geometry>
+          <material>
+            <ambient>0.25 0.25 0.25 1</ambient>
+            <diffuse>0.45 0.45 0.45 1</diffuse>
+            <specular>0.18 0.18 0.18 1</specular>
+            <emissive>0.02 0.02 0.02 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ===== Goal marker (光らせて見失わない) ===== -->
+    <model name="goal_marker">
+      <static>true</static>
+      <pose>3.5 3.5 0.25 0 0 0</pose>
+      <link name="link">
+        <visual name="vis">
+          <geometry><sphere><radius>0.28</radius></sphere></geometry>
+          <material>
+            <ambient>0.10 0.90 0.10 1</ambient>
+            <diffuse>0.10 0.95 0.10 1</diffuse>
+            <specular>0.25 0.25 0.25 1</specular>
+            <emissive>0.25 1.00 0.25 1</emissive>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
