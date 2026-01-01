@@ -25,7 +25,7 @@ https://zenn.dev/takeofuture/articles/a40714ecf8917b
 ```
 # apt install python3 python3-pip python3-venv
 # python3 -m venv ~/pyenv_rl_demo
-# source ~/pyenv_rl_demo
+# source ~/pyenv_rl_demo/bin/activate
 (pyenv_rl_demo)$ pip install -r requirement.txt
 ```
 
