@@ -28,3 +28,13 @@ https://zenn.dev/takeofuture/articles/a40714ecf8917b
 # source ~/pyenv_rl_demo
 (pyenv_rl_demo)$ pip install -r requirement.txt
 ```
+
+ROS2の開発場所を作る
+```
+(pyenv_rl_demo)$ mkdir -p ~/rl_demo/rl_ws/src
+(pyenv_rl_demo)$ cd ~/rl_demo/rl_ws/src
+```
+Pythonパッケージ雛形を作成（ament_python）
+```
+ros2 pkg create tb3_rl --build-type ament_python --dependencies rclpy geometry_msgs ros_gz_interfaces
+```
