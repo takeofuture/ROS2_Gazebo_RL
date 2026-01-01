@@ -29,12 +29,81 @@ https://zenn.dev/takeofuture/articles/a40714ecf8917b
 (pyenv_rl_demo)$ pip install -r requirement.txt
 ```
 
-ROS2の開発場所を作る
+## 実験環境の構築
+** ROS2の開発場所を作る
 ```
 (pyenv_rl_demo)$ mkdir -p ~/rl_demo/rl_ws/src
 (pyenv_rl_demo)$ cd ~/rl_demo/rl_ws/src
 ```
-Pythonパッケージ雛形を作成（ament_python）
+** Pythonパッケージ雛形を作成（ament_python）
 ```
 ros2 pkg create tb3_rl --build-type ament_python --dependencies rclpy geometry_msgs ros_gz_interfaces
 ```
+** 上記のPYTHONをsrc/tb3_rl/tb3_rl内に配置してください。作業スペースでGIT　CLONEしても多分大丈夫だとは思います。
+```
+(pyenv_rl_demo) $ tree
+.
+├── checkpoints
+│   └── ppo_tb3_arena_9000_steps.zip
+└── src
+    └── tb3_rl
+        ├── package.xml
+        ├── resource
+        │   └── tb3_rl
+        ├── setup.cfg
+        ├── setup.py
+        ├── tb3_rl
+        │   ├── env.py
+        │   ├── infer.py
+        │   ├── node_bridge.py
+        │   ├── resume.py
+        │   └── train.py
+        └── test
+            ├── test_copyright.py
+            ├── test_flake8.py
+            └── test_pep257.py
+```
+** コンパイル
+```
+(pyenv_rl_demo) $ colcon build --symlink-install
+Starting >>> tb3_rl
+Finished <<< tb3_rl [4.17s]
+Summary: 1 package finished [4.61s]
+```
+** 環境読込
+```
+(pyenv_rl_demo) $ source install/setup.bash
+```
+** シンプルに実行(ロボットが少し動きます)
+```
+(pyenv_rl_demo) $ python -m tb3_rl.node_bridge
+```
+** １から学習
+```
+(pyenv_rl_demo) $ python -m tb3_rl.train
+```
+**　チェックポイントの重みから追加の学習
+```
+(pyenv_rl_demo) $ python -m tb3_rl.resume
+```
+この場合src/tb3_rl/tb3_rl/resume.pyの以下の一行をファイル名に合わせて変更して、再度BUILDと環境の読み込みを実施してください。
+```
+def main():
+    env = DummyVecEnv([lambda: TB3ArenaEnv()])
+    ckpt = "checkpoints/ppo_tb3_arena_11000_steps.zip"  # ←再開したいzip
+    model = PPO.load(ckpt, env=env)
+```
+**　推論
+```
+(pyenv_rl_demo) $ python -m tb3_rl.resume
+```
+推論も同様で学習済で使用したい重みを指定してください
+```
+def main():
+    env = DummyVecEnv([lambda: TB3ArenaEnv()])
+    model = PPO.load("checkpoints/ppo_tb3_arena_12000_steps.zip", env=env)
+    obs = env.reset()
+```
+
+
+
