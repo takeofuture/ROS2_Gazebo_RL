@@ -63,7 +63,26 @@ ros2 pkg create tb3_rl --build-type ament_python --dependencies rclpy geometry_m
             ├── test_flake8.py
             └── test_pep257.py
 ```
-** コンパイル
+
+## 実行準備
+背景に関しては上記の記事および以下の記事で簡単に触れてますが、手順にそって進めます。
+* 定義した世界（環境）を立ち上げる
+https://zenn.dev/takeofuture/articles/40d83d88ff6138
+```
+(pyenv_rl_demo) $ gz sim -r /root/rl_demo/worlds/arena.sdf &
+```
+そのあと、ロボットを(-2.0, -2.0）に出現させます。
+```
+(pyenv_rl_demo) $ ros2 run ros_gz_sim create -world arena -file /opt/ros/jazzy/share/turtlebot3_gazebo/models/turtlebot3_waffle/model.sdf -name tb3 -x -2.5 -y -2.5 -z 0.02
+```
+ROS2とGAZEBOが双方向でコミュニケーションをとるためのブリッジをさせます。
+```
+(pyenv_rl_demo) $ ros2 run ros_gz_bridge parameter_bridge /cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist &
+(pyenv_rl_demo) $ ros2 run ros_gz_bridge parameter_bridge /odom@nav_msgs/msg/Odometry@gz.msgs.Odometry &
+```
+
+## PYTHONコードのコンパイルと実行
+** コードコンパイル
 ```
 (pyenv_rl_demo) $ colcon build --symlink-install
 Starting >>> tb3_rl
@@ -104,6 +123,5 @@ def main():
     model = PPO.load("checkpoints/ppo_tb3_arena_12000_steps.zip", env=env)
     obs = env.reset()
 ```
-
 
 
