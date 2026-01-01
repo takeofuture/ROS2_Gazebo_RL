@@ -65,7 +65,9 @@ ros2 pkg create tb3_rl --build-type ament_python --dependencies rclpy geometry_m
 ```
 
 ## 実行準備
-背景に関しては上記の記事および以下の記事で簡単に触れてますが、手順にそって進めます。
+背景や実行結果の録画などはに関しては上記の記事および以下の記事で簡単に触れてます。
+https://zenn.dev/takeofuture/articles/7da22e8751886e
+それでは手順にそって進めます。
 * 定義した世界（環境）を立ち上げる
 https://zenn.dev/takeofuture/articles/40d83d88ff6138
 ```
